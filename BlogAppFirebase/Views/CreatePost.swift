@@ -8,10 +8,43 @@
 import SwiftUI
 
 struct CreatePost: View {
-    @StateObject private var blogData = BlogViewModel()
+    @EnvironmentObject var blogData: BlogViewModel
+    
+    // Post Properties
+    @State private var postTitle = ""
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        // Since I need Nav Buttons
+        // So including NavBar
+        NavigationView {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 15) {
+                    VStack(alignment: .leading) {
+                        TextField("Post Title", text: $postTitle)
+                            .font(.title2)
+                        
+                        Divider()
+                    }
+                }
+                .padding()
+            }
+            // Changing Post Title Dynamic
+            .navigationTitle(postTitle == "" ? "Post Title" : postTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        blogData.createPost.toggle()
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Post") {
+                        blogData.createPost.toggle()
+                    }
+                }
+            }
+        }
     }
 }
 
