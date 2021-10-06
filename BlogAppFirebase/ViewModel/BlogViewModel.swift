@@ -8,5 +8,6 @@
 import SwiftUI
 
 class BlogViewModel: ObservableObject {
-    
+    // Posts
+    @Published var posts: [Post]?
 }
