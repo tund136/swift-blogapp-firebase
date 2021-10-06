@@ -33,7 +33,6 @@ struct PostContent: Identifiable, Codable {
     var type: PostType
     
     enum CodingKeys: String, CodingKey {
-        case id
         // Since firestore keyname is key
         case type = "key"
         case value

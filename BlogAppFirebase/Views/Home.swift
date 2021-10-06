@@ -54,6 +54,9 @@ struct Home: View {
         .task {
             await blogData.fetchPosts()
         }
+        .alert(blogData.alertMsg, isPresented: $blogData.showAlert) {
+            
+        }
     }
     
     @ViewBuilder
