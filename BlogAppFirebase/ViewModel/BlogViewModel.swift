@@ -33,4 +33,19 @@ class BlogViewModel: ObservableObject {
             showAlert.toggle()
         }
     }
+    
+    func deletePost(post: Post) {
+        guard let _ = posts
+        else {
+            return
+        }
+        
+        let index = posts?.firstIndex(where: { currentPost in
+            return currentPost.id == post.id
+        }) ?? 0
+        
+        withAnimation {
+            posts?.remove(at: index)
+        }
+    }
 }

@@ -27,7 +27,19 @@ struct Home: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.primary)
                 } else {
-                    ProgressView()
+                    List(posts) { post in
+                        // Card View
+                        CardView(post: post)
+                        // Swipe to delete
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                Button(role: .destructive, action: {
+                                    blogData.deletePost(post: post)
+                                }, label: {
+                                    Image(systemName: "trash")
+                                })
+                            }
+                    }
+                    .listStyle(.insetGrouped)
                 }
             } else {
                 ProgressView()
