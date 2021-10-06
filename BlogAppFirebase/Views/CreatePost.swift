@@ -43,6 +43,17 @@ struct CreatePost: View {
                     ForEach($postContent) { $content in
                         // Custom Text Editor from UIKit
                         TextView(text: $content.value, height: $content.height, fontSize: getFontSize(type: content.type))
+                        // Approx Height based on Font for First Display
+                            .frame(height: content.height == 0 ? getFontSize(type: content.type) * 2 : content.height)
+                            .background(
+                                Text(content.type.rawValue)
+                                    .font(.system(size: getFontSize(type: content.type)))
+                                    .foregroundColor(.gray)
+                                    .opacity(content.value == "" ? 0.7 : 0)
+                                    .padding(.leading, 5)
+                                
+                                , alignment: .leading
+                            )
                     }
                     
                     // Menu Button to insert Post Content
