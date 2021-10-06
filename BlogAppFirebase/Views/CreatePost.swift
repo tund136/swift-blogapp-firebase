@@ -12,6 +12,8 @@ struct CreatePost: View {
     
     // Post Properties
     @State private var postTitle = ""
+    @State private var authorName = ""
+    @State private var postContent: [PostContent] = []
     
     var body: some View {
         // Since I need Nav Buttons
@@ -25,6 +27,36 @@ struct CreatePost: View {
                         
                         Divider()
                     }
+                    
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Author:")
+                            .font(.caption.bold())
+                        
+                        TextField("iJustine", text: $authorName)
+                        
+                        Divider()
+                    }
+                    .padding(.top, 5)
+                    .padding(.bottom, 20)
+                    
+                    // Menu Button to insert Post Content
+                    Menu(content: {
+                        // Iterating Cases
+                        ForEach(PostType.allCases, id: \.rawValue) { type in
+                            Button(type.rawValue) {
+                                // Appending New PostContent
+                                withAnimation {
+                                    postContent.append(PostContent(value: "", type: type))
+                                }
+                            }
+                        }
+                    }, label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title)
+                            .foregroundStyle(.primary)
+                    })
+                        .foregroundStyle(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding()
             }
