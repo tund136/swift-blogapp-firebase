@@ -31,10 +31,6 @@ struct Home: View {
                 }
             } else {
                 ProgressView()
-                List {
-                    
-                }
-                .listStyle(.insetGrouped)
             }
         }
         .navigationTitle("My Blog")
@@ -54,6 +50,10 @@ struct Home: View {
                 .foregroundStyle(.primary)
             , alignment: .bottomTrailing
         )
+        // Fetching Blog Posts
+        .task {
+            await blogData.fetchPosts()
+        }
     }
     
     @ViewBuilder
