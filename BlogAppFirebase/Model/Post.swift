@@ -36,6 +36,7 @@ struct PostContent: Identifiable, Codable {
     // Only for UI not for Backend
     var height: CGFloat = 0
     var showImage: Bool = false
+    var showDeleteAlert: Bool = false
     
     enum CodingKeys: String, CodingKey {
         // Since firestore keyname is key

@@ -57,12 +57,17 @@ struct CreatePost: View {
                                         }
                                 } else {
                                     // TextField for URL
-                                    TextField("Image URL", text: $content.value, onCommit:  {
-                                        withAnimation {
-                                            content.showImage = true
-                                        }
-                                        // To show image when pressed return
-                                    })
+                                    VStack {
+                                        TextField("Image URL", text: $content.value, onCommit:  {
+                                            withAnimation {
+                                                content.showImage = true
+                                            }
+                                            // To show image when pressed return
+                                        })
+                                        
+                                        Divider()
+                                    }
+                                    .padding(.leading, 5)
                                 }
                             } else {
                                 // Custom Text Editor from UIKit
@@ -79,6 +84,27 @@ struct CreatePost: View {
                                         
                                         , alignment: .leading
                                     )
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .contentShape(Rectangle())
+                        // Swipe to delete
+                        .gesture(DragGesture().onEnded({ value in
+                            if -value.translation.width < (UIScreen.main.bounds.width / 2.5) && !content.showDeleteAlert {
+                                // Showing alert
+                                content.showDeleteAlert = true
+                            }
+                        }))
+                        .alert("Sure to delete this content?", isPresented: $content.showDeleteAlert) {
+                            Button("Delete", role: .destructive) {
+                                // Deleting content
+                                let index = postContent.firstIndex { currentPost in
+                                    return currentPost.id == content.id
+                                } ?? 0
+                                
+                                withAnimation {
+                                    postContent.remove(at: index)
+                                }
                             }
                         }
                     }
