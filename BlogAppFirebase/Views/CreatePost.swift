@@ -15,6 +15,9 @@ struct CreatePost: View {
     @State private var authorName = ""
     @State private var postContent: [PostContent] = []
     
+    // Keyboard Focus State for TextViews
+    @FocusState var showKeyboard: Bool
+    
     var body: some View {
         // Since I need Nav Buttons
         // So including NavBar
@@ -64,6 +67,7 @@ struct CreatePost: View {
                             } else {
                                 // Custom Text Editor from UIKit
                                 TextView(text: $content.value, height: $content.height, fontSize: getFontSize(type: content.type))
+                                    .focused($showKeyboard)
                                 // Approx Height based on Font for First Display
                                     .frame(height: content.height == 0 ? getFontSize(type: content.type) * 2 : content.height)
                                     .background(
@@ -104,17 +108,29 @@ struct CreatePost: View {
             .navigationTitle(postTitle == "" ? "Post Title" : postTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        blogData.createPost.toggle()
+                    if !showKeyboard {
+                        Button("Cancel") {
+                            blogData.createPost.toggle()
+                        }
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Post") {
-                        blogData.createPost.toggle()
+                    if showKeyboard {
+                        Button("Done") {
+                            // Closing Keyboard
+                            showKeyboard.toggle()
+                        }
+                    } else {
+                        Button("Post") {
+                            
+                        }
+                        .disabled(authorName == "" || postTitle == "")
                     }
                 }
+
             }
         }
     }
