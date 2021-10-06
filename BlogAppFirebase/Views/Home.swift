@@ -50,7 +50,7 @@ struct Home: View {
         .overlay(
             // FAB Button
             Button(action: {
-                
+                blogData.createPost.toggle()
             }, label: {
                 Image(systemName: "plus")
                     .font(.title2.bold())
@@ -65,6 +65,11 @@ struct Home: View {
         // Fetching Blog Posts
         .task {
             await blogData.fetchPosts()
+        }
+        .fullScreenCover(isPresented: $blogData.createPost) {
+            // Create Post View
+            CreatePost()
+                .environmentObject(blogData)
         }
         .alert(blogData.alertMsg, isPresented: $blogData.showAlert) {
             

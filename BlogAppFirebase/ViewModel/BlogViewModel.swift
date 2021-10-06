@@ -17,6 +17,9 @@ class BlogViewModel: ObservableObject {
     @Published var alertMsg = ""
     @Published var showAlert = false
     
+    // New Post
+    @Published var createPost = false
+    
     // Async Await Method
     func fetchPosts() async {
         do {
