@@ -19,6 +19,7 @@ class BlogViewModel: ObservableObject {
     
     // New Post
     @Published var createPost = false
+    @Published var isWriting = false
     
     // Async Await Method
     func fetchPosts() async {
@@ -49,6 +50,30 @@ class BlogViewModel: ObservableObject {
         
         withAnimation {
             posts?.remove(at: index)
+        }
+    }
+    
+    func writePost(content: [PostContent], author: String, postTitle: String) {
+        do {
+            // Loading animation
+            withAnimation {
+                isWriting = true
+            }
+            
+            // Storing to DB
+            let post = Post(title: postTitle, author: author, postContent: content, date: Timestamp(date: Date()))
+            
+            let _ = try Firestore.firestore().collection("Blog").document().setData(from: post)
+            
+            withAnimation {
+                // Adding to post
+                posts?.append(post)
+                isWriting = true
+                // Closing post view
+                createPost = false
+            }
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
