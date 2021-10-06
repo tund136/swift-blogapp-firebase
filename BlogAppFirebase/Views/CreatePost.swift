@@ -41,19 +41,42 @@ struct CreatePost: View {
                     
                     // Iterating Post Content
                     ForEach($postContent) { $content in
-                        // Custom Text Editor from UIKit
-                        TextView(text: $content.value, height: $content.height, fontSize: getFontSize(type: content.type))
-                        // Approx Height based on Font for First Display
-                            .frame(height: content.height == 0 ? getFontSize(type: content.type) * 2 : content.height)
-                            .background(
-                                Text(content.type.rawValue)
-                                    .font(.system(size: getFontSize(type: content.type)))
-                                    .foregroundColor(.gray)
-                                    .opacity(content.value == "" ? 0.7 : 0)
-                                    .padding(.leading, 5)
-                                
-                                , alignment: .leading
-                            )
+                        VStack {
+                            // Image URL
+                            if content.type == .Image {
+                                if content.showImage && content.value != "" {
+                                    WebImage(url: content.value)
+                                    // If tap change URL
+                                        .onTapGesture {
+                                            withAnimation {
+                                                content.showImage = false
+                                            }
+                                        }
+                                } else {
+                                    // TextField for URL
+                                    TextField("Image URL", text: $content.value, onCommit:  {
+                                        withAnimation {
+                                            content.showImage = true
+                                        }
+                                        // To show image when pressed return
+                                    })
+                                }
+                            } else {
+                                // Custom Text Editor from UIKit
+                                TextView(text: $content.value, height: $content.height, fontSize: getFontSize(type: content.type))
+                                // Approx Height based on Font for First Display
+                                    .frame(height: content.height == 0 ? getFontSize(type: content.type) * 2 : content.height)
+                                    .background(
+                                        Text(content.type.rawValue)
+                                            .font(.system(size: getFontSize(type: content.type)))
+                                            .foregroundColor(.gray)
+                                            .opacity(content.value == "" ? 0.7 : 0)
+                                            .padding(.leading, 5)
+                                        
+                                        , alignment: .leading
+                                    )
+                            }
+                        }
                     }
                     
                     // Menu Button to insert Post Content
@@ -108,5 +131,30 @@ func getFontSize(type: PostType) -> CGFloat {
         return 18
     case .Image:
         return 18
+    }
+}
+
+// Async Image
+struct WebImage: View {
+    
+    var url: String
+    
+    var body: some View {
+        AsyncImage(url: URL(string: url)) { phase in
+            if let image = phase.image {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width - 30, height: 250)
+                    .cornerRadius(15)
+            } else {
+                if let _ = phase.error {
+                    Text("Failed to load image.")
+                } else {
+                    ProgressView()
+                }
+            }
+        }
+        .frame(height: 250)
     }
 }
