@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 import Firebase
+import SwiftUI
 
 // Post Model
 struct Post: Identifiable, Codable {
@@ -31,6 +32,9 @@ struct PostContent: Identifiable, Codable {
     var id = UUID().uuidString
     var value: String
     var type: PostType
+    // For Height
+    // Only for UI not for Backend
+    var height: CGFloat = 0
     
     enum CodingKeys: String, CodingKey {
         // Since firestore keyname is key

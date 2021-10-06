@@ -39,6 +39,12 @@ struct CreatePost: View {
                     .padding(.top, 5)
                     .padding(.bottom, 20)
                     
+                    // Iterating Post Content
+                    ForEach($postContent) { $content in
+                        // Custom Text Editor from UIKit
+                        TextView(text: $content.value, height: $content.height, fontSize: getFontSize(type: content.type))
+                    }
+                    
                     // Menu Button to insert Post Content
                     Menu(content: {
                         // Iterating Cases
@@ -80,3 +86,16 @@ struct CreatePost: View {
     }
 }
 
+// Dynamic Height
+func getFontSize(type: PostType) -> CGFloat {
+    switch type {
+    case .Header:
+        return 24
+    case .SubHeading:
+        return 22
+    case .Paragraph:
+        return 18
+    case .Image:
+        return 18
+    }
+}
